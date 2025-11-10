@@ -12,7 +12,7 @@ class MapWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final LatLng center = LatLng(latitude, longitude);
     return FlutterMap(
-      options: MapOptions(initialCenter: center),
+      options: MapOptions(initialCenter: center, initialZoom: 17),
       children: [
         TileLayer(
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',

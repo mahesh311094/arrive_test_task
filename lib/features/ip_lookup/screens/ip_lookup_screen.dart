@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../core/widgets/map_widget.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../../core/widgets/primary_text_field.dart';
+import '../models/ip_lookup_model.dart';
+import '../repository/ip_lookup_repository.dart';
 
 class IpLookupScreen extends StatefulWidget {
   const IpLookupScreen({super.key});
@@ -13,6 +15,7 @@ class IpLookupScreen extends StatefulWidget {
 
 class _IpLookupScreenState extends State<IpLookupScreen> {
   final TextEditingController _ipController = TextEditingController();
+  IpLookupModel? ipData;
 
   @override
   void dispose() {
@@ -37,11 +40,35 @@ class _IpLookupScreenState extends State<IpLookupScreen> {
             Row(
               children: [
                 Expanded(
-                  child: PrimaryButton(onPressed: () {}, text: 'Lookup'),
+                  child: PrimaryButton(
+                    onPressed: () async {
+                      if (_ipController.text.trim().isNotEmpty) {
+                        ipData = await getIpLookupInfo(
+                          ip: _ipController.text.trim(),
+                        );
+                        setState(() {});
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Please enter an IP address'),
+                            duration: Duration(seconds: 2),
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      }
+                    },
+                    text: 'Lookup',
+                  ),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
-                  child: PrimaryButton(onPressed: () {}, text: 'Use My IP'),
+                  child: PrimaryButton(
+                    onPressed: () async {
+                      ipData = await getCurrentIpInfo();
+                      setState(() {});
+                    },
+                    text: 'Use My IP',
+                  ),
                 ),
               ],
             ),
@@ -53,7 +80,10 @@ class _IpLookupScreenState extends State<IpLookupScreen> {
                   color: Colors.grey.shade200,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: MapWidget(latitude: 51.5074, longitude: -0.1278),
+                child: MapWidget(
+                  latitude: ipData?.latitude ?? 51.5074,
+                  longitude: ipData?.longitude ?? -0.1278,
+                ),
               ),
             ),
           ],
