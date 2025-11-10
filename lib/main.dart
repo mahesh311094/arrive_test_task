@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'features/ip_lookup/screens/ip_lookup_screen.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -14,10 +16,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello, Arrive'),
-        ),
+      home: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Arrive',
+        home: IpLookupScreen(),
       ),
     );
   }
