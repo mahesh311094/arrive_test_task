@@ -1,30 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/widgets/map_widget.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../../core/widgets/primary_text_field.dart';
-import '../models/ip_lookup_model.dart';
-import '../repository/ip_lookup_repository.dart';
+import '../providers/ip_lookup_provider.dart';
 
-class IpLookupScreen extends StatefulWidget {
-  const IpLookupScreen({super.key});
-
-  @override
-  State<IpLookupScreen> createState() => _IpLookupScreenState();
-}
-
-class _IpLookupScreenState extends State<IpLookupScreen> {
+class IpLookupScreen extends ConsumerWidget {
   final TextEditingController _ipController = TextEditingController();
-  IpLookupModel? ipData;
+
+  IpLookupScreen({super.key});
 
   @override
-  void dispose() {
-    _ipController.dispose();
-    super.dispose();
-  }
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ipState = ref.watch(ipLookupViewModelProvider);
+    final ipViewModel = ref.read(ipLookupViewModelProvider.notifier);
 
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Arrive IP Locator'), centerTitle: true),
       body: Padding(
@@ -41,12 +32,11 @@ class _IpLookupScreenState extends State<IpLookupScreen> {
               children: [
                 Expanded(
                   child: PrimaryButton(
-                    onPressed: () async {
+                    onPressed: () {
                       if (_ipController.text.trim().isNotEmpty) {
-                        ipData = await getIpLookupInfo(
+                        ipViewModel.fetchIpLookupInfo(
                           ip: _ipController.text.trim(),
                         );
-                        setState(() {});
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -64,28 +54,40 @@ class _IpLookupScreenState extends State<IpLookupScreen> {
                 Expanded(
                   child: PrimaryButton(
                     onPressed: () async {
-                      ipData = await getCurrentIpInfo();
-                      setState(() {});
+                      await ipViewModel.fetchCurrentIpInfo();
+                      _ipController.text = ipState.ipInfo?.ip ?? "";
                     },
                     text: 'Use My IP',
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: MapWidget(
-                  latitude: ipData?.latitude ?? 51.5074,
-                  longitude: ipData?.longitude ?? -0.1278,
+            const SizedBox(height: 16),
+            if (ipState.isLoading)
+              const Center(child: CircularProgressIndicator()),
+            if (ipState.error != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Text(
+                  ipState.error!,
+                  style: TextStyle(color: Colors.red),
                 ),
               ),
-            ),
+            const SizedBox(height: 16),
+            if (!ipState.isLoading)
+              Expanded(
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade200,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: MapWidget(
+                    latitude: ipState.ipInfo?.latitude ?? 51.5074,
+                    longitude: ipState.ipInfo?.longitude ?? -0.1278,
+                  ),
+                ),
+              ),
           ],
         ),
       ),
