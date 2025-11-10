@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/widgets/map_widget.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../../core/widgets/primary_text_field.dart';
 
@@ -52,10 +53,7 @@ class _IpLookupScreenState extends State<IpLookupScreen> {
                   color: Colors.grey.shade200,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Text(
-                  'Map or Location will appear here',
-                  style: TextStyle(color: Colors.black54),
-                ),
+                child: MapWidget(latitude: 51.5074, longitude: -0.1278),
               ),
             ),
           ],
