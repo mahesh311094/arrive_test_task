@@ -1,16 +1,72 @@
-# arrive_test_task
+# Arrive IP Locator - Flutter Tech Test
 
-A new Flutter project.
+A Flutter Android and iOS app to fetch IP address info and show its approximate location on a map.  
+Developed using **MVVM** with clean architecture, **Riverpod**, and Flutter best practices.
+
+---
+
+## Overview
+This app allows users to:
+- Enter an IP address or use their current IP.
+- Fetch approximate latitude and longitude using the [ipapi.co](https://ipapi.co/) API.
+- Display the location on **OpenStreetMap**.
+
+---
+
+## Features
+- Enter an IP or use your current IP to fetch location.
+- Displays latitude & longitude on **OpenStreetMap**.
+- Loading indicators and error handling.
+- Reusable UI widgets (button, text field, map).
+- **MVVM** with clean architecture.
+- **Riverpod** for state management.
+- Unit, widget, and integration tests included.
+
+---
+
+## Tech Stack
+- Flutter 3.x
+- Riverpod (State Management)
+- flutter_map (OpenStreetMap)
+- http (Networking)
+- latlong2 (Coordinates)
+
+---
+
+## Service Abstraction
+- All API calls go through **HttpService**.
+- **Repository** converts JSON to models and handles URLs.
+- **ViewModel** uses only the repository, keeping UI decoupled.
+
+This makes it easy to change the networking library or API without affecting the UI or state.
+
+---
+
+## App Screenshot
+![Arrive IP Locator Screenshot](assets/screenshots/ip_lookup_screen.png)
+
+---
 
 ## Getting Started
+```bash
+flutter pub get
+flutter run
+```
+---
 
-This project is a starting point for a Flutter application.
+## Testing
+```bash
+# Unit and widget tests
+flutter test
 
-A few resources to get you started if this is your first Flutter project:
+# Integration tests
+flutter test integration_test/
+```
+---
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Future Improvements
+- Better rate-limit handling with retry/backoff.
+- More extensive integration test coverage.
+- Support for offline map caching.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
