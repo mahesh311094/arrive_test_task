@@ -55,7 +55,8 @@ class IpLookupScreen extends ConsumerWidget {
                   child: PrimaryButton(
                     onPressed: () async {
                       await ipViewModel.fetchCurrentIpInfo();
-                      _ipController.text = ipState.ipInfo?.ip ?? "";
+                      final updatedState = ref.read(ipLookupViewModelProvider);
+                      _ipController.text = updatedState.ipInfo?.ip ?? "";
                     },
                     text: 'Use My IP',
                   ),
