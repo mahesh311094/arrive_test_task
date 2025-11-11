@@ -43,7 +43,7 @@ This makes it easy to change the networking library or API without affecting the
 ---
 
 ## App Screenshot
-<img src="assets/screenshots/ip_lookup_screen.png" alt="Arrive IP Locator Screenshot" width="400"/>
+<img src="assets/screenshots/ip_lookup_screen.png" alt="Arrive IP Locator Screenshot" width="300"/>
 ---
 
 ## Getting Started
